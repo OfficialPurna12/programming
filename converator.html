@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>English to Nepali Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1000px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .converter-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        textarea {
+            height: 200px;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: none;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .convert-btn {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .clear-btn {
+            background-color: #e2e8f0;
+            color: #4a5568;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .converter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>English to Nepali Converter</h1>
+        <div class="converter-grid">
+            <div class="input-group">
+                <label for="english">English Text</label>
+                <textarea id="english" placeholder="Enter English text here..."></textarea>
+            </div>
+            <div class="input-group">
+                <label for="nepali">Nepali Text</label>
+                <textarea id="nepali" placeholder="नेपाली अनुवाद यहाँ देखिनेछ..." readonly></textarea>
+            </div>
+        </div>
+        <div class="controls">
+            <button class="convert-btn" onclick="convertText()">Convert</button>
+            <button class="clear-btn" onclick="clearText()">Clear</button>
+        </div>
+    </div>
+
+    <script>
+        // English to Nepali character mapping
+        const characterMap = {
+            'a': 'अ',
+            'aa': 'आ',
+            'i': 'इ',
+            'ii': 'ई',
+            'u': 'उ',
+            'uu': 'ऊ',
+            'e': 'ए',
+            'ai': 'ऐ',
+            'o': 'ओ',
+            'au': 'औ',
+            'k': 'क',
+            'kh': 'ख',
+            'g': 'ग',
+            'gh': 'घ',
+            'ng': 'ङ',
+            'ch': 'च',
+            'chh': 'छ',
+            'j': 'ज',
+            'jh': 'झ',
+            'ny': 'ञ',
+            't': 'त',
+            'th': 'थ',
+            'd': 'द',
+            'dh': 'ध',
+            'n': 'न',
+            'p': 'प',
+            'ph': 'फ',
+            'b': 'ब',
+            'bh': 'भ',
+            'm': 'म',
+            'y': 'य',
+            'r': 'र',
+            'l': 'ल',
+            'w': 'व',
+            'sh': 'श',
+            's': 'स',
+            'h': 'ह'
+        };
+
+        function convertText() {
+            const englishText = document.getElementById('english').value.toLowerCase();
+            let nepaliText = '';
+            let i = 0;
+
+            while (i < englishText.length) {
+                let found = false;
+                // Check for two-character combinations first
+                if (i < englishText.length - 1) {
+                    const twoChars = englishText.slice(i, i + 2);
+                    if (characterMap[twoChars]) {
+                        nepaliText += characterMap[twoChars];
+                        i += 2;
+                        found = true;
+                        continue;
+                    }
+                }
+                // If no two-character match, check single character
+                if (!found) {
+                    const char = englishText[i];
+                    nepaliText += characterMap[char] || char;
+                    i++;
+                }
+            }
+
+            document.getElementById('nepali').value = nepaliText;
+        }
+
+        function clearText() {
+            document.getElementById('english').value = '';
+            document.getElementById('nepali').value = '';
+        }
+    </script>
+</body>
+</html>
